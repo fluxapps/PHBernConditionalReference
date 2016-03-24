@@ -1,0 +1,3 @@
+limit_number_per_user#:#Anzahl Einträge pro User
+only_on_values#:#Bei folgenden Referenz-Values
+only_certain_number_of_entries_are_possible#:#Es können nur %s "%s" Einträge pro Benutzer erfasst werden.
