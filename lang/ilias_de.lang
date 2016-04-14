@@ -1,3 +1,6 @@
 limit_number_per_user#:#Anzahl Einträge pro User
 only_on_values#:#Bei folgenden Referenz-Values
+only_certain_number_of_entry_is_possible#:#Es kann nur ein "%s" Eintrag pro Benutzer erfasst werden.
 only_certain_number_of_entries_are_possible#:#Es können nur %s "%s" Einträge pro Benutzer erfasst werden.
+hide_on_field#:#Feld ausblenden wenn Feld
+hide_on_field_value#:#Ausblenden auf folgendem Wert
