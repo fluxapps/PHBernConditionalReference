@@ -8,5 +8,14 @@ require_once('./Modules/DataCollection/classes/Fields/Reference/class.ilDclRefer
  * @version 1.0.0
  */
 class ilPHBernConditionalReferenceRecordRepresentation extends ilDclReferenceRecordRepresentation {
-	// requires class because it extends Reference-Field
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getConfirmationHTML() {
+		if($this->record_field->getValue() == '') {
+			return false;
+		}
+		return parent::getConfirmationHTML();
+	}
 }

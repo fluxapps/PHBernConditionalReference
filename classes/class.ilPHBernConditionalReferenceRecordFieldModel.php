@@ -9,4 +9,8 @@ require_once('./Modules/DataCollection/classes/Fields/Reference/class.ilDclRefer
  */
 class ilPHBernConditionalReferenceRecordFieldModel extends ilDclReferenceRecordFieldModel {
 	// requires class because it extends Reference-Field
+	/**
+	 * @inheritDoc
+	 */
+	public function __construct(ilDclBaseRecordModel $record, ilDclBaseFieldModel $field) { parent::__construct($record, $field); }
 }
