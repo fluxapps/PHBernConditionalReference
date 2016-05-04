@@ -67,7 +67,7 @@ class ilPHBernConditionalReferenceFieldModel extends ilDclReferenceFieldModel {
 				} else {
 					$message = sprintf(ilPHBernConditionalReferencePlugin::getInstance()->txt('only_certain_number_of_entries_are_possible'), $this->getProperty(self::PROP_LIMIT_PER_USER), $record_field);
 				}
-				throw new ilDclInputException(ilDclInputException::TYPE_EXCEPTION, $message);
+				throw new ilDclInputException(ilDclInputException::CUSTOM_MESSAGE, $message);
 			}
 		}
 
