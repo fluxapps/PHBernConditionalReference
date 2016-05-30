@@ -11,6 +11,12 @@ require_once('./Modules/DataCollection/classes/Fields/Reference/class.ilDclRefer
 class ilPHBernConditionalReferenceFieldRepresentation extends ilDclReferenceFieldRepresentation {
 	protected $pl;
 
+
+	/**
+	 * ilPHBernConditionalReferenceFieldRepresentation constructor.
+	 *
+	 * @param ilDclBaseFieldModel $field
+	 */
 	public function __construct(ilDclBaseFieldModel $field) {
 		$this->pl = ilPHBernConditionalReferencePlugin::getInstance();
 
@@ -18,6 +24,12 @@ class ilPHBernConditionalReferenceFieldRepresentation extends ilDclReferenceFiel
 	}
 
 
+	/**
+	 * @param ilPropertyFormGUI $form
+	 * @param int               $record_id
+	 *
+	 * @return ilMultiSelectInputGUI|ilSelectInputGUI|null
+	 */
 	public function getInputField(ilPropertyFormGUI $form, $record_id = 0) {
 		global $tpl;
 		$input = parent::getInputField($form, $record_id);
@@ -54,9 +66,7 @@ class ilPHBernConditionalReferenceFieldRepresentation extends ilDclReferenceFiel
 	 */
 	public function buildFieldCreationInput(ilObjDataCollection $dcl, $mode = 'create') {
 		$opt = parent::buildFieldCreationInput($dcl, $mode);
-
-		$pl =
-
+		
 		$input = new ilNumberInputGUI($this->pl->txt('limit_number_per_user'), $this->getPropertyInputFieldId(ilPHBernConditionalReferenceFieldModel::PROP_LIMIT_PER_USER));
 		$opt->addSubItem($input);
 
