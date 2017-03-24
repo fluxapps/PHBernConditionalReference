@@ -13,6 +13,7 @@ class ilPHBernConditionalReferenceFieldModel extends ilDclReferenceFieldModel {
 	const PROP_ONLY_ON_VALUES = "phbe_creference_only_on_ref_values";
 	const PROP_HIDE_ON_FIELD = "phbe_creference_hide_on_field";
 	const PROP_HIDE_ON_FIELD_VALUE = "phbe_creference_hide_on_field_value";
+	const PROP_ID_SORTING = "phbe_creference_sort_by_id";
 
 	/**
 	 * @inheritDoc
@@ -27,7 +28,7 @@ class ilPHBernConditionalReferenceFieldModel extends ilDclReferenceFieldModel {
 	 * @inheritDoc
 	 */
 	public function getValidFieldProperties() {
-		$props = array_merge(parent::getValidFieldProperties(), array(ilDclBaseFieldModel::PROP_PLUGIN_HOOK_NAME, self::PROP_LIMIT_PER_USER, self::PROP_ONLY_ON_VALUES, self::PROP_HIDE_ON_FIELD, self::PROP_HIDE_ON_FIELD_VALUE));
+		$props = array_merge(parent::getValidFieldProperties(), array(ilDclBaseFieldModel::PROP_PLUGIN_HOOK_NAME, self::PROP_LIMIT_PER_USER, self::PROP_ONLY_ON_VALUES, self::PROP_HIDE_ON_FIELD, self::PROP_HIDE_ON_FIELD_VALUE, self::PROP_ID_SORTING));
 		return $props;
 	}
 

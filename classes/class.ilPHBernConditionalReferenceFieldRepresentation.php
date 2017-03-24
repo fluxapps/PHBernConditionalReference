@@ -34,6 +34,12 @@ class ilPHBernConditionalReferenceFieldRepresentation extends ilDclReferenceFiel
 		global $tpl;
 		$input = parent::getInputField($form, $record_id);
 
+		if($this->field->getProperty(ilPHBernConditionalReferenceFieldModel::PROP_ID_SORTING)) {
+			$options = $input->getOptions();
+			ksort($options);
+			$input->setOptions($options);
+		}
+
 		if($this->field->hasProperty(ilPHBernConditionalReferenceFieldModel::PROP_HIDE_ON_FIELD)) {
 			$field_id = $this->field->getProperty(ilPHBernConditionalReferenceFieldModel::PROP_HIDE_ON_FIELD);
 			$field_value = $this->field->getProperty(ilPHBernConditionalReferenceFieldModel::PROP_HIDE_ON_FIELD_VALUE);
@@ -84,6 +90,9 @@ class ilPHBernConditionalReferenceFieldRepresentation extends ilDclReferenceFiel
 		$opt->addSubItem($input);
 
 		$input = new ilTextInputGUI(ilPHBernConditionalReferencePlugin::getInstance()->txt('hide_on_field_value'), $this->getPropertyInputFieldId(ilPHBernConditionalReferenceFieldModel::PROP_HIDE_ON_FIELD_VALUE));
+		$opt->addSubItem($input);
+
+		$input = new ilCheckboxInputGUI($this->pl->txt('sort_by_id'), $this->getPropertyInputFieldId(ilPHBernConditionalReferenceFieldModel::PROP_ID_SORTING));
 		$opt->addSubItem($input);
 
 		return $opt;
