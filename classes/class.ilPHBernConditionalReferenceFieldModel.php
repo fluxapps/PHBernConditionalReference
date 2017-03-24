@@ -14,6 +14,7 @@ class ilPHBernConditionalReferenceFieldModel extends ilDclReferenceFieldModel {
 	const PROP_HIDE_ON_FIELD = "phbe_creference_hide_on_field";
 	const PROP_HIDE_ON_FIELD_VALUE = "phbe_creference_hide_on_field_value";
 	const PROP_ID_SORTING = "phbe_creference_sort_by_id";
+	const PROP_ROLE_RESTRICTIONS = "phbe_creference_role_restrictions";
 
 	/**
 	 * @inheritDoc
@@ -28,7 +29,7 @@ class ilPHBernConditionalReferenceFieldModel extends ilDclReferenceFieldModel {
 	 * @inheritDoc
 	 */
 	public function getValidFieldProperties() {
-		$props = array_merge(parent::getValidFieldProperties(), array(ilDclBaseFieldModel::PROP_PLUGIN_HOOK_NAME, self::PROP_LIMIT_PER_USER, self::PROP_ONLY_ON_VALUES, self::PROP_HIDE_ON_FIELD, self::PROP_HIDE_ON_FIELD_VALUE, self::PROP_ID_SORTING));
+		$props = array_merge(parent::getValidFieldProperties(), array(ilDclBaseFieldModel::PROP_PLUGIN_HOOK_NAME, self::PROP_LIMIT_PER_USER, self::PROP_ONLY_ON_VALUES, self::PROP_HIDE_ON_FIELD, self::PROP_HIDE_ON_FIELD_VALUE, self::PROP_ID_SORTING, self::PROP_ROLE_RESTRICTIONS));
 		return $props;
 	}
 
@@ -42,7 +43,7 @@ class ilPHBernConditionalReferenceFieldModel extends ilDclReferenceFieldModel {
 	 * @throws ilDclInputException
 	 */
 	public function checkValidity($value, $record_id = NULL) {
-		global $ilUser;
+		global $ilUser, $rbacreview;
 
 		if($this->hasProperty(self::PROP_LIMIT_PER_USER)) {
 			$count = 0;
@@ -72,8 +73,13 @@ class ilPHBernConditionalReferenceFieldModel extends ilDclReferenceFieldModel {
 			}
 		}
 
-		if($this->hasProperty(ilPHBernConditionalReferenceFieldModel::PROP_HIDE_ON_FIELD)) {
-
+		if($restrictions = $this->getProperty(ilPHBernConditionalReferenceFieldModel::PROP_ROLE_RESTRICTIONS)) {
+			$assigned_roles = $rbacreview->assignedRoles($ilUser->getId());
+			foreach ($restrictions as $restriction) {
+				if (in_array($value, explode(',', $restriction['values'])) && empty(array_intersect($assigned_roles, explode(',', $restriction['roles'])))) {
+					throw new ilDclInputException(ilDclInputException::CUSTOM_MESSAGE, 'Value Restricted to certain roles');
+				}
+			}
 		}
 
 		return true;

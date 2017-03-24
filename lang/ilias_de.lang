@@ -5,3 +5,4 @@ only_certain_number_of_entries_are_possible#:#Es können nur %s "%s" Einträge p
 hide_on_field#:#Feld ausblenden wenn Feld
 hide_on_field_value#:#Ausblenden auf folgendem Wert
 sort_by_id#:#Auswahl nach ID sortieren
+role_restrictions#:#Rolleneinschränkungen

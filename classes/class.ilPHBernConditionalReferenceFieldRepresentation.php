@@ -31,13 +31,30 @@ class ilPHBernConditionalReferenceFieldRepresentation extends ilDclReferenceFiel
 	 * @return ilMultiSelectInputGUI|ilSelectInputGUI|null
 	 */
 	public function getInputField(ilPropertyFormGUI $form, $record_id = 0) {
-		global $tpl;
+		global $DIC;
+		$tpl = $DIC['tpl'];
+		$rbacreview = $DIC['rbacreview'];
+		$ilUser = $DIC['ilUser'];
+
 		$input = parent::getInputField($form, $record_id);
 
+		$options = $input->getOptions();
 		if($this->field->getProperty(ilPHBernConditionalReferenceFieldModel::PROP_ID_SORTING)) {
-			$options = $input->getOptions();
+			unset($options['']);
 			ksort($options);
 			$input->setOptions($options);
+		}
+
+		if($restrictions = $this->field->getProperty(ilPHBernConditionalReferenceFieldModel::PROP_ROLE_RESTRICTIONS)) {
+			$assigned_roles = $rbacreview->assignedRoles($ilUser->getId());
+			foreach ($restrictions as $restriction) {
+				if (empty(array_intersect($assigned_roles, explode(',', $restriction['roles'])))) {
+					foreach (explode(',', $restriction['values']) as $value) {
+						unset ($options[$value]);
+					}
+					$input->setOptions($options);
+				}
+			}
 		}
 
 		if($this->field->hasProperty(ilPHBernConditionalReferenceFieldModel::PROP_HIDE_ON_FIELD)) {
@@ -94,6 +111,19 @@ class ilPHBernConditionalReferenceFieldRepresentation extends ilDclReferenceFiel
 
 		$input = new ilCheckboxInputGUI($this->pl->txt('sort_by_id'), $this->getPropertyInputFieldId(ilPHBernConditionalReferenceFieldModel::PROP_ID_SORTING));
 		$opt->addSubItem($input);
+
+		$multiinput = new srDclContentImporterMultiLineInputGUI($this->pl->txt('role_restrictions'),$this->getPropertyInputFieldId(ilPHBernConditionalReferenceFieldModel::PROP_ROLE_RESTRICTIONS));
+		$multiinput->setInfo("1) Werte, 2) Rollen");
+		$multiinput->setTemplateDir(ilDclContentImporterPlugin::getInstance()->getDirectory());
+
+		$values_input = new ilTextInputGUI('', 'values');
+		$multiinput->addInput($values_input);
+
+		$roles_input = new ilTextInputGUI('', 'roles');
+		$multiinput->addInput($roles_input);
+
+		$opt->addSubItem($multiinput);
+
 
 		return $opt;
 	}
