@@ -40,7 +40,6 @@ class ilPHBernConditionalReferenceFieldRepresentation extends ilDclReferenceFiel
 
 		$options = $input->getOptions();
 		if($this->field->getProperty(ilPHBernConditionalReferenceFieldModel::PROP_ID_SORTING)) {
-			unset($options['']);
 			ksort($options);
 			$input->setOptions($options);
 		}
@@ -48,6 +47,9 @@ class ilPHBernConditionalReferenceFieldRepresentation extends ilDclReferenceFiel
 		if($restrictions = $this->field->getProperty(ilPHBernConditionalReferenceFieldModel::PROP_ROLE_RESTRICTIONS)) {
 			$assigned_roles = $rbacreview->assignedRoles($ilUser->getId());
 			foreach ($restrictions as $restriction) {
+				if (!$restriction['roles']) {
+					continue;
+				}
 				if (empty(array_intersect($assigned_roles, explode(',', $restriction['roles'])))) {
 					foreach (explode(',', $restriction['values']) as $value) {
 						unset ($options[$value]);
@@ -59,11 +61,18 @@ class ilPHBernConditionalReferenceFieldRepresentation extends ilDclReferenceFiel
 
 		if($this->field->hasProperty(ilPHBernConditionalReferenceFieldModel::PROP_HIDE_ON_FIELD)) {
 			$field_id = $this->field->getProperty(ilPHBernConditionalReferenceFieldModel::PROP_HIDE_ON_FIELD);
+			$field = ilDclCache::getFieldCache($field_id);
 			$field_value = $this->field->getProperty(ilPHBernConditionalReferenceFieldModel::PROP_HIDE_ON_FIELD_VALUE);
 
+			if ($field->getDatatypeTitle() == 'boolean') {
+				$negative_operator = $field_value ? '' : '!';
+				$condition = $negative_operator . '$("#field_'.$field_id.'")[0].checked';
+			} else {
+				$condition = '$("#field_'.$field_id.'").val() == "'.$field_value.'"';
+			}
 			$script = '$("#field_'.$field_id.'")
 			.change(function () {
-				if($("#field_'.$field_id.'").val() == "'.$field_value.'") {
+				if(' . $condition . ') {
 					$("#field_'.$this->field->getId().'").val("");
 					$("#il_prop_cont_field_'.$this->field->getId().'").hide();
 				} else {

@@ -76,6 +76,9 @@ class ilPHBernConditionalReferenceFieldModel extends ilDclReferenceFieldModel {
 		if($restrictions = $this->getProperty(ilPHBernConditionalReferenceFieldModel::PROP_ROLE_RESTRICTIONS)) {
 			$assigned_roles = $rbacreview->assignedRoles($ilUser->getId());
 			foreach ($restrictions as $restriction) {
+				if (!$restriction['roles']) {
+					continue;
+				}
 				if (in_array($value, explode(',', $restriction['values'])) && empty(array_intersect($assigned_roles, explode(',', $restriction['roles'])))) {
 					throw new ilDclInputException(ilDclInputException::CUSTOM_MESSAGE, 'Value Restricted to certain roles');
 				}
