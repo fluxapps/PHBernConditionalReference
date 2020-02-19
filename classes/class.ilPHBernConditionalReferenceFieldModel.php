@@ -22,7 +22,7 @@ class ilPHBernConditionalReferenceFieldModel extends ilDclReferenceFieldModel {
 	public function __construct($a_id = 0) {
 		parent::__construct($a_id);
 
-		$this->setStorageLocationOverride(2);
+		$this->setStorageLocationOverride(1);
 	}
 
 	/**
