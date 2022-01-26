@@ -1,8 +1,8 @@
 <?php
 $id = 'phbe_creference';
-$version = '1.0.1';
-$ilias_min_version = '5.0.000';
-$ilias_max_version = '5.4.999';
+$version = '1.0.2';
+$ilias_min_version = '6.0';
+$ilias_max_version = '6.99';
 $responsible = 'Michael Herren';
 $responsible_mail = 'mh@studer-raimann.ch';
 ?>
